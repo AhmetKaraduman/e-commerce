@@ -1,0 +1,23 @@
+{
+	"name": "ecommerce",
+	"version": "1.0.0",
+	"description": "MERN Full-stack application",
+	"main": "server.js",
+	"type": "module",
+	"scripts": {
+		"start": "node backend/server",
+		"server": "nodemon backend/server",
+		"client": "npm start --prefix frontend",
+		"dev": "concurrently \"npm run server\" \"npm run client\" "
+	},
+	"author": "Ahmet Karaduman",
+	"license": "MIT",
+	"dependencies": {
+		"concurrently": "^7.2.2",
+		"dotenv": "^16.0.1"
+	},
+	"devDependencies": {
+		"express": "^4.18.1",
+		"nodemon": "^2.0.18"
+	}
+}
