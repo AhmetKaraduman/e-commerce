@@ -13,7 +13,11 @@ router.get(
 		// gives us everything
 		const products = await Product.find({});
 
-		res.json(products);
+		if (products) {
+			res.json(products);
+		} else {
+			throw new Error("Some Error");
+		}
 	})
 );
 

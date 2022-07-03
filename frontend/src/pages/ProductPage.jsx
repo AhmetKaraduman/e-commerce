@@ -1,22 +1,31 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Row, Col, Image, ListGroup, Card, Button } from "react-bootstrap";
 import Rating from "../components/Rating";
 import { useParams } from "react-router-dom";
+import { fetchProduct } from "../features/productAction";
+import Loader from "../components/Loader";
+import Message from "../components/Message";
 
 function ProductPage() {
 	const params = useParams();
-	const [product, setProduct] = useState({});
+	const dispatch = useDispatch();
+	const { product, isLoading, message, isError } = useSelector(
+		(state) => state.product
+	);
 
 	useEffect(() => {
-		const fetchProduct = async () => {
-			const res = await axios.get(`/api/products/${params.id}`);
-			setProduct(res.data);
-		};
+		dispatch(fetchProduct(params.id));
+	}, [params.id, dispatch]);
 
-		fetchProduct();
-	}, [params.id]);
+	if (isLoading) {
+		return <Loader></Loader>;
+	}
+
+	if (isError) {
+		return <Message variant="danger">{message}</Message>;
+	}
 
 	return (
 		<>

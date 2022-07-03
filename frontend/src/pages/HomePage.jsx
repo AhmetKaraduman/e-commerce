@@ -1,20 +1,28 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchProducts } from "../features/productAction";
 import { Row, Col } from "react-bootstrap";
 import Product from "../components/Product";
+import Message from "../components/Message";
+import Loader from "../components/Loader";
 
 function HomePage() {
-	const [products, setProducts] = useState([]);
+	const { products, isLoading, isError, message } = useSelector(
+		(state) => state.product
+	);
+	const dispatch = useDispatch();
 
 	useEffect(() => {
-		const fetchProducts = async () => {
-			const res = await axios.get("api/products");
-			setProducts(res.data);
-		};
+		dispatch(fetchProducts());
+	}, [dispatch]);
 
-		fetchProducts();
-	}, []);
+	if (isLoading) {
+		return <Loader />;
+	}
 
+	if (isError) {
+		return <Message variant="danger">{message}</Message>;
+	}
 	return (
 		<>
 			<h1>Latest Products</h1>
