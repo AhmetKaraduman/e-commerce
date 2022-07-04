@@ -22,7 +22,7 @@ const authUser = asyncHandler(async (req, res) => {
 		});
 	} else {
 		res.status(401);
-		res.send("Invalid Credential");
+		throw new Error("Invalid Credential");
 	}
 });
 
@@ -42,7 +42,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
 		});
 	} else {
 		res.status(404);
-		res.send("User Not Found");
+		throw new Error("User Not Found");
 	}
 });
 
@@ -72,7 +72,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 		});
 	} else {
 		res.status(404);
-		res.send("User Not Found");
+		throw new Error("User Not Found");
 	}
 });
 
@@ -85,14 +85,14 @@ const registerUser = asyncHandler(async (req, res) => {
 	// Validation
 	if (!email || !name || !password) {
 		res.status(400);
-		throw new Error({ message: "Please Include All Fields." });
+		throw new Error("Please Include All Fields.");
 	}
 
 	// Find is user already exist
 	const userExist = await User.findOne({ email });
 	if (userExist) {
 		res.status(400);
-		throw new Error({ message: "User Already Exist." });
+		throw new Error("User Already Exist.");
 	}
 
 	// Hash password
@@ -117,11 +117,11 @@ const registerUser = asyncHandler(async (req, res) => {
 		});
 	} else {
 		res.status(400);
-		res.json({ message: "Invalid User Data" });
+		throw new Error("Invalid User Data");
 	}
 
 	res.status(201);
-	res.json({ message: "create user" });
+	throw new Error("create user");
 });
 
 export { authUser, getUserProfile, registerUser, updateUserProfile };

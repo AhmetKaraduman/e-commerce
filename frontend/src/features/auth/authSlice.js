@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { loginUser, logoutUser, registerUser } from "./authAction";
+import { updateProfile } from "../profile/profileAction";
 
 const user = JSON.parse(localStorage.getItem("userInfo"));
 const initialState = {
@@ -51,6 +52,9 @@ export const authSlice = createSlice({
 			})
 			.addCase(logoutUser.fulfilled, (state, action) => {
 				state.user = null;
+			})
+			.addCase(updateProfile.fulfilled, (state, action) => {
+				state.user = action.payload;
 			});
 	},
 });

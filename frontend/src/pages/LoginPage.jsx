@@ -13,7 +13,7 @@ function LoginPage() {
 	const [password, setPassword] = useState("");
 
 	const dispatch = useDispatch();
-	const { isLoading, isSuccess, isError, user } = useSelector(
+	const { isLoading, isSuccess, isError, user, message } = useSelector(
 		(state) => state.auth
 	);
 
@@ -30,7 +30,7 @@ function LoginPage() {
 		}
 	}, [user]);
 
-	if (isSuccess) {
+	if (isSuccess || isError) {
 		setTimeout(() => dispatch(authSliceAction.reset()), 3000);
 	}
 
@@ -38,21 +38,10 @@ function LoginPage() {
 		return <Loader />;
 	}
 
-	if (isError) {
-		return (
-			<Message variant="danger">
-				Can not login. Please{" "}
-				<Link to="/login" onClick={() => dispatch(authSliceAction.reset())}>
-					try again
-				</Link>{" "}
-				.
-			</Message>
-		);
-	}
-
 	return (
 		<FormContainer>
 			<h1>Sign In</h1>
+			{isError && <Message variant="danger">{message}</Message>}
 			<Form onSubmit={submitHandler}>
 				<Form.Group controlId="email">
 					<Form.Label>Email Address</Form.Label>

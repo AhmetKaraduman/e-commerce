@@ -13,10 +13,10 @@ function RegisterPage() {
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
 	const [name, setName] = useState("");
-	const [message, setMessage] = useState(null);
+	const [comMessage, setComMessage] = useState(null);
 
 	const dispatch = useDispatch();
-	const { isLoading, isSuccess, isError, user } = useSelector(
+	const { isLoading, isSuccess, isError, user, message } = useSelector(
 		(state) => state.auth
 	);
 
@@ -25,12 +25,20 @@ function RegisterPage() {
 	const submitHandler = (e) => {
 		e.preventDefault();
 		if (!email || !password || !name) {
-			setMessage("Please fill all fields ");
+			setComMessage("Please fill all fields ");
+			setTimeout(
+				() => (dispatch(authSliceAction.reset()), setComMessage(null)),
+				3000
+			);
 		} else {
 			if (password === confirmPassword) {
 				dispatch(registerUser({ email, password, name }));
 			} else {
-				setMessage("Password do not match");
+				setComMessage("Password do not match");
+				setTimeout(
+					() => (dispatch(authSliceAction.reset()), setComMessage(null)),
+					3000
+				);
 			}
 		}
 	};
@@ -41,7 +49,7 @@ function RegisterPage() {
 		}
 	}, [user]);
 
-	if (isSuccess) {
+	if (isSuccess || isError) {
 		setTimeout(() => dispatch(authSliceAction.reset()), 3000);
 	}
 
@@ -49,21 +57,11 @@ function RegisterPage() {
 		return <Loader />;
 	}
 
-	if (isError) {
-		return (
-			<Message variant="danger">
-				Can not Register. Please{" "}
-				<Link to="/register" onClick={() => dispatch(authSliceAction.reset())}>
-					try again.
-				</Link>
-			</Message>
-		);
-	}
-
 	return (
 		<FormContainer>
 			<h1>Sign Up</h1>
-			{message && <Message variant="danger">{message}</Message>}
+			{comMessage && <Message variant="danger">{comMessage}</Message>}
+			{isError && <Message variant="danger">{message}</Message>}
 			<Form onSubmit={submitHandler}>
 				<Form.Group controlId="name">
 					<Form.Label>Name</Form.Label>
