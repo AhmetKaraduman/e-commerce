@@ -31,10 +31,10 @@ function Header() {
 							{user ? (
 								<NavDropdown title={user.name} id="username">
 									<LinkContainer to="/profile">
-										<NavDropdown.Item>Profile</NavDropdown.Item>
+										<NavDropdown.Item active={false}>Profile</NavDropdown.Item>
 									</LinkContainer>
 									<LinkContainer to="/">
-										<NavDropdown.Item onClick={logoutHandler}>
+										<NavDropdown.Item onClick={logoutHandler} active={false}>
 											Logout
 										</NavDropdown.Item>
 									</LinkContainer>
