@@ -5,6 +5,8 @@ import ProductPage from "./pages/ProductPage";
 import CartPage from "./pages/CartPage";
 import { Container } from "react-bootstrap";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 
 function App() {
 	return (
@@ -16,9 +18,11 @@ function App() {
 						<Route path="/" element={<HomePage />} />
 						<Route path="/product/:id" element={<ProductPage />} />
 						<Route path="/cart">
-							<Route path=":id" element={<CartPage />} />
 							<Route path="" element={<CartPage />} />
+							<Route path=":id" element={<CartPage />} />
 						</Route>
+						<Route path="/login" element={<LoginPage />} />
+						<Route path="/register" element={<RegisterPage />} />
 					</Routes>
 				</Container>
 			</main>
