@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import colors from "colors";
 import productRoutes from "./routes/productRoutes.js";
 import userRouters from "./routes/userRoutes.js";
+import shippingAddressRoutes from "./routes/shippingAddressRoutes.js";
+import orderRouter from "./routes/orderRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 
 dotenv.config();
@@ -16,7 +18,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// creating a route
+// API route
 app.get("/", (req, res) => {
 	res.send("API is running....");
 });
@@ -25,6 +27,10 @@ app.get("/", (req, res) => {
 app.use("/api/products", productRoutes);
 // route for users
 app.use("/api/users", userRouters);
+// route for shipping address
+app.use("/api/shippingaddress", shippingAddressRoutes);
+// route for order
+app.use("/api/orders", orderRouter);
 
 app.use(notFound);
 app.use(errorHandler);

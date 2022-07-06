@@ -12,15 +12,17 @@ import {
 	Button,
 	Card,
 } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useParams, useLocation } from "react-router-dom";
 
 let initialEntrance = true;
 
 function CartPage() {
 	const { cartItems } = useSelector((state) => state.cart);
+	const { user } = useSelector((state) => state.auth);
 	const dispatch = useDispatch();
 	const params = useParams();
+	const navigate = useNavigate();
 	const location = useLocation();
 	const qty = location.search ? +location.search.split("=")[1] : 1;
 	const itemInfo = {
@@ -40,7 +42,11 @@ function CartPage() {
 	};
 
 	const checkoutHandler = () => {
-		console.log("go to shopping");
+		if (user) {
+			navigate("/shipping");
+		} else {
+			navigate("/login");
+		}
 	};
 
 	return (
