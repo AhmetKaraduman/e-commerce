@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../features/auth/authAction";
 import { LinkContainer } from "react-router-bootstrap";
 import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
+import { cartSliceAction } from "../features/cart/cartSlice";
 
 function Header() {
 	const { user } = useSelector((state) => state.auth);
@@ -11,6 +12,7 @@ function Header() {
 
 	const logoutHandler = () => {
 		dispatch(logoutUser());
+		dispatch(cartSliceAction.reset());
 	};
 
 	return (
@@ -23,7 +25,7 @@ function Header() {
 					<Navbar.Toggle aria-controls="basic-navbar-nav" />
 					<Navbar.Collapse id="basic-navbar-nav">
 						<Nav className="ml-auto">
-							<LinkContainer to="/cart">
+							<LinkContainer to={user ? "/cart" : "/login"}>
 								<Nav.Link active={false}>
 									<i className="fas fa-shopping-cart" /> Cart
 								</Nav.Link>
@@ -45,6 +47,19 @@ function Header() {
 										<i className="fas fa-user" /> Sign In
 									</Nav.Link>
 								</LinkContainer>
+							)}
+							{user && user.isAdmin && (
+								<NavDropdown title="admin" id="adminmenu">
+									<LinkContainer to="/admin/userlist">
+										<NavDropdown.Item active={false}>Users</NavDropdown.Item>
+									</LinkContainer>
+									<LinkContainer to="/admin/productlist">
+										<NavDropdown.Item active={false}>Products</NavDropdown.Item>
+									</LinkContainer>
+									<LinkContainer to="/admin/orderlist">
+										<NavDropdown.Item active={false}>Orders</NavDropdown.Item>
+									</LinkContainer>
+								</NavDropdown>
 							)}
 						</Nav>
 					</Navbar.Collapse>

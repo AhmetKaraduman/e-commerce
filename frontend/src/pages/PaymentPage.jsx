@@ -16,6 +16,7 @@ function PaymentPage() {
 	const submitHandler = (e) => {
 		e.preventDefault();
 		dispatch(paymentSliceAction.savePaymentMethod(paymentMethod));
+		localStorage.setItem("paymentMethod", JSON.stringify(paymentMethod));
 		navigate("/placeorder");
 	};
 

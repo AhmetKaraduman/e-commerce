@@ -32,6 +32,11 @@ app.use("/api/shippingaddress", shippingAddressRoutes);
 // route for order
 app.use("/api/orders", orderRouter);
 
+// get config for paypal
+app.get("/api/config/paypal", (req, res) =>
+	res.send(process.env.PAYPAL_CLIENT_ID)
+);
+
 app.use(notFound);
 app.use(errorHandler);
 

@@ -36,10 +36,9 @@ function PlaceOrder() {
 
 	useEffect(() => {
 		if (isSuccess) {
-			// navigate(`/order/${orders._id}`);
-			console.log(navigate);
+			navigate(`/order/${orders._id}`);
 		}
-	}, [isSuccess]);
+	}, [isSuccess, navigate, orders._id]);
 
 	const placeOrderHandler = () => {
 		dispatch(
@@ -50,18 +49,11 @@ function PlaceOrder() {
 				shippingPrice,
 				taxPrice,
 				totalPrice,
+				itemsPrice,
 			})
 		);
 
 		setTimeout(() => dispatch(orderSliceAction.reset()), 3000);
-		console.log({
-			orderItems: cartItems,
-			shippingAddress,
-			paymentMethod: payment,
-			shippingPrice,
-			taxPrice,
-			totalPrice,
-		});
 	};
 
 	return (

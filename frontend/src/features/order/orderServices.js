@@ -13,8 +13,21 @@ const createOrder = async (order, token) => {
 	return data;
 };
 
+// getOrder
+const getOrder = async (id, token) => {
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	};
+
+	const { data } = await axios.get(ORDER_URL + `/${id}`, config);
+	return data;
+};
+
 const orderServices = {
 	createOrder,
+	getOrder,
 };
 
 export default orderServices;

@@ -6,6 +6,9 @@ import profileSlice from "./features/profile/profileSlice";
 import shippingSlice from "./features/shipping/shippingSlice";
 import paymentSlice from "./features/payment/paymentSlice";
 import orderSlice from "./features/order/orderSlice";
+import paySlice from "./features/pay/paySlice";
+import myOrdersSlice from "./features/myOrders/myOrdersSlice";
+import userSlice from "./features/user/userSlice";
 
 export const store = configureStore({
 	reducer: {
@@ -16,6 +19,9 @@ export const store = configureStore({
 		shipping: shippingSlice.reducer,
 		payment: paymentSlice.reducer,
 		orders: orderSlice.reducer,
+		pay: paySlice.reducer,
+		myOrders: myOrdersSlice.reducer,
+		users: userSlice.reducer,
 	},
 });
 

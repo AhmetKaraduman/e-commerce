@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createOrder } from "./orderAction";
+import { createOrder, getOrderById } from "./orderAction";
 
 const orders = JSON.parse(localStorage.getItem("orders"));
 
@@ -33,6 +33,19 @@ const orderSlice = createSlice({
 				state.message = action.payload;
 			})
 			.addCase(createOrder.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSuccess = true;
+				state.orders = action.payload;
+			})
+			.addCase(getOrderById.pending, (state) => {
+				state.isLoading = true;
+			})
+			.addCase(getOrderById.rejected, (state, action) => {
+				state.isLoading = false;
+				state.isError = true;
+				state.message = action.payload;
+			})
+			.addCase(getOrderById.fulfilled, (state, action) => {
 				state.isLoading = false;
 				state.isSuccess = true;
 				state.orders = action.payload;

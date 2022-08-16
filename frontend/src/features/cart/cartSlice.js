@@ -30,6 +30,13 @@ export const cartSlice = createSlice({
 			);
 			localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
 		},
+		reset: (state) => {
+			state.isError = false;
+			state.isSuccess = false;
+			state.isLoading = false;
+			state.message = null;
+			state.cartItems = [];
+		},
 	},
 	extraReducers: (builder) => {
 		builder
