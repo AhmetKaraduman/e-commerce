@@ -12,29 +12,73 @@ import {
 } from "react-bootstrap";
 import Rating from "../components/Rating";
 import { useParams, useNavigate } from "react-router-dom";
-import { fetchProduct } from "../features/product/productAction";
+import { fetchProduct, createReview } from "../features/product/productAction";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
+import { createCartItem } from "../features/cart/cartAction";
+import { productSliceAction } from "../features/product/productSlice";
 
 function ProductPage() {
 	const params = useParams();
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	const { product, isLoading, message, isError } = useSelector(
-		(state) => state.product
-	);
+	const {
+		product,
+		isLoading,
+		message,
+		isError,
+		createReviewError,
+		createReviewSuccess,
+		reviewMessage,
+	} = useSelector((state) => state.product);
+	const { user } = useSelector((state) => state.auth);
+	const { name, price, image, description } = product;
 	const [qty, setQty] = useState(1);
+	const [rating, setRating] = useState(0);
+	const [comment, setComment] = useState("");
 
 	useEffect(() => {
+		if (createReviewSuccess) {
+			alert("Review Submitted!");
+			setRating(0);
+			setComment("");
+			dispatch(productSliceAction.reset());
+		}
 		dispatch(fetchProduct(params.id));
-	}, [params.id, dispatch]);
+	}, [params.id, dispatch, createReviewSuccess]);
 
 	const addToCartHandler = () => {
+		const cartInfo = {
+			name,
+			price,
+			image,
+			description,
+			quantity: qty,
+			_id: params.id,
+		};
+
+		dispatch(createCartItem(cartInfo));
+
 		navigate(`/cart/${params.id}?qty=${qty}`);
 	};
 
+	const submitHandler = (e) => {
+		e.preventDefault();
+
+		if (!rating) {
+			throw new Error("Please rate.");
+		} else {
+			const review = {
+				id: params.id,
+				rating,
+				comment,
+			};
+			dispatch(createReview(review));
+		}
+	};
+
 	if (isLoading) {
-		return <Loader></Loader>;
+		return <Loader />;
 	}
 
 	if (isError) {
@@ -124,6 +168,72 @@ function ProductPage() {
 					</Card>
 				</Col>
 			</Row>
+
+			{product ? (
+				<Row>
+					<Col md={6}>
+						<h2>Reviews</h2>
+						{product && product?.reviews.length === 0 && (
+							<Message>No Reviews</Message>
+						)}
+						<ListGroup variant="flush">
+							{product.reviews.map((review) => (
+								<ListGroup.Item key={review._id}>
+									<strong>{review.name}</strong>
+									<Rating value={review.rating} text={""} />
+									<p>{review.createdAt.substring(0, 10)}</p>
+									<p>{review.comment}</p>
+								</ListGroup.Item>
+							))}
+							<br />
+							<h1>Write a Customer Review</h1>
+							{createReviewError && (
+								<Message variant="danger">{reviewMessage}</Message>
+							)}
+							<ListGroup.Item>
+								{user ? (
+									<Form onSubmit={submitHandler}>
+										<Form.Group controlId="rating">
+											<Form.Label>Rating</Form.Label>
+											<Form.Control
+												as="select"
+												value={rating}
+												onChange={(e) => setRating(e.target.value)}
+											>
+												<option value={""}>Select...</option>
+												<option value={"1"}>1 - Poor</option>
+												<option value={"2"}>2 - Fair</option>
+												<option value={"3"}>3 - Good</option>
+												<option value={"4"}>4 - Very Good</option>
+												<option value={"5"}>5 - Excellent</option>
+											</Form.Control>
+										</Form.Group>
+										<Form.Group controlId="comment">
+											<Form.Label>Comment</Form.Label>
+											<Form.Control
+												as="textarea"
+												row="3"
+												value={comment}
+												onChange={(e) => setComment(e.target.value)}
+											></Form.Control>
+										</Form.Group>
+										<Button type="submit" variant="primary">
+											Submit
+										</Button>
+									</Form>
+								) : (
+									<Message>
+										{" "}
+										Please <Link to="/login">sign in</Link> to write a review
+									</Message>
+								)}
+							</ListGroup.Item>
+						</ListGroup>
+					</Col>
+				</Row>
+			) : (
+				<></>
+			)}
 		</>
 	);
 }

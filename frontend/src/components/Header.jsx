@@ -4,6 +4,7 @@ import { logoutUser } from "../features/auth/authAction";
 import { LinkContainer } from "react-router-bootstrap";
 import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import { cartSliceAction } from "../features/cart/cartSlice";
+import SearchBox from "./SearchBox";
 
 function Header() {
 	const { user } = useSelector((state) => state.auth);
@@ -24,6 +25,7 @@ function Header() {
 					</LinkContainer>
 					<Navbar.Toggle aria-controls="basic-navbar-nav" />
 					<Navbar.Collapse id="basic-navbar-nav">
+						<SearchBox />
 						<Nav className="ml-auto">
 							<LinkContainer to={user ? "/cart" : "/login"}>
 								<Nav.Link active={false}>

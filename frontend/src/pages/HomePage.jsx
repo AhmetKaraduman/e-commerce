@@ -5,16 +5,19 @@ import { Row, Col } from "react-bootstrap";
 import Product from "../components/Product";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
+import { useParams } from "react-router-dom";
 
 function HomePage() {
+	const params = useParams();
+	const keyword = params.keyword;
 	const { products, isLoading, isError, message } = useSelector(
 		(state) => state.product
 	);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		dispatch(fetchProducts());
-	}, [dispatch]);
+		dispatch(fetchProducts(keyword));
+	}, [dispatch, keyword]);
 
 	if (isLoading) {
 		return <Loader />;

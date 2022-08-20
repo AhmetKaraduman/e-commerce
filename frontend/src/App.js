@@ -16,6 +16,7 @@ import UserListPage from "./pages/UserListPage";
 import UserEditPage from "./pages/UserEditPage";
 import ProductListPage from "./pages/ProductListPage";
 import ProductEditPage from "./pages/ProductEditPage";
+import OrderListPage from "./pages/OrderListPage";
 
 function App() {
 	return (
@@ -25,6 +26,7 @@ function App() {
 				<Container>
 					<Routes>
 						<Route path="/" element={<HomePage />} />
+						<Route path="/search/:keyword" element={<HomePage />} />
 						<Route path="/product/:id" element={<ProductPage />} />
 						<Route path="/cart">
 							<Route path="" element={<CartPage />} />
@@ -44,6 +46,7 @@ function App() {
 							element={<ProductEditPage />}
 						/>
 						<Route path="/admin/productList" element={<ProductListPage />} />
+						<Route path="/admin/orderlist" element={<OrderListPage />} />
 					</Routes>
 				</Container>
 			</main>

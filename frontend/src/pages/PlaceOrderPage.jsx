@@ -14,6 +14,10 @@ function PlaceOrder() {
 	const navigate = useNavigate();
 
 	const { cartItems } = useSelector((state) => state.cart);
+
+	let newData = cartItems.map((item) =>
+		Object.assign({}, item, { product: item._id, qty: item.quantity })
+	);
 	const { shippingAddress } = useSelector((state) => state.shipping);
 	const { payment } = useSelector((state) => state.payment);
 	const { orders, isError, isSuccess, isLoading, message } = useSelector(
@@ -26,7 +30,7 @@ function PlaceOrder() {
 
 	// calculate prices
 	const itemsPrice = addDecimals(
-		cartItems.reduce((acc, item) => acc + item.price * item.qty, 0)
+		cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0)
 	);
 	const shippingPrice = addDecimals(itemsPrice < 100 ? 10 : 0);
 	const taxPrice = addDecimals(Number((0.18 * itemsPrice).toFixed(2)));
@@ -38,12 +42,12 @@ function PlaceOrder() {
 		if (isSuccess) {
 			navigate(`/order/${orders._id}`);
 		}
-	}, [isSuccess, navigate, orders._id]);
+	}, [isSuccess, navigate, orders]);
 
 	const placeOrderHandler = () => {
 		dispatch(
 			createOrder({
-				orderItems: cartItems,
+				orderItems: newData,
 				shippingAddress,
 				paymentMethod: payment,
 				shippingPrice,
@@ -53,7 +57,7 @@ function PlaceOrder() {
 			})
 		);
 
-		setTimeout(() => dispatch(orderSliceAction.reset()), 3000);
+		// setTimeout(() => dispatch(orderSliceAction.reset()), 3000);
 	};
 
 	return (
@@ -107,7 +111,8 @@ function PlaceOrder() {
 													</Link>
 												</Col>
 												<Col md={4}>
-													{item.qty} X ${item.price} = ${item.qty * item.price}
+													{item.quantity} X ${item.price} = $
+													{(item.quantity * item.price).toFixed(2)}
 												</Col>
 											</Row>
 										</ListGroup.Item>

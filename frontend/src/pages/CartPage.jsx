@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getProductInfo } from "../features/cart/cartAction";
+import { deleteCartItem, getCartItem } from "../features/cart/cartAction";
 import { cartSliceAction } from "../features/cart/cartSlice";
 import Message from "../components/Message";
 import {
@@ -14,11 +14,11 @@ import {
 } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useParams, useLocation } from "react-router-dom";
-
-let initialEntrance = true;
+import Loader from "../components/Loader";
 
 function CartPage() {
-	const { cartItems } = useSelector((state) => state.cart);
+	const { cartItems, isDeleteSuccess, isCreateSuccess, isLoading } =
+		useSelector((state) => state.cart);
 	const { user } = useSelector((state) => state.auth);
 	const dispatch = useDispatch();
 	const params = useParams();
@@ -31,14 +31,11 @@ function CartPage() {
 	};
 
 	useEffect(() => {
-		if (!initialEntrance) {
-			dispatch(getProductInfo(itemInfo));
-		}
-		initialEntrance = false;
-	}, []);
+		dispatch(getCartItem());
+	}, [isDeleteSuccess, isCreateSuccess]);
 
-	const removeFromCartHandler = (id) => {
-		dispatch(cartSliceAction.removeItemFromCart(id));
+	const removeItemFromCart = (id) => {
+		dispatch(deleteCartItem(id));
 	};
 
 	const checkoutHandler = () => {
@@ -48,6 +45,10 @@ function CartPage() {
 			navigate("/login");
 		}
 	};
+
+	if (isLoading) {
+		return <Loader />;
+	}
 
 	return (
 		<Row>
@@ -60,7 +61,7 @@ function CartPage() {
 				) : (
 					<ListGroup variant="flush">
 						{cartItems.map((item) => (
-							<ListGroup.Item key={item.product}>
+							<ListGroup.Item key={item._id}>
 								<Row>
 									<Col md={2}>
 										<Image src={item.image} alt={item.name} fluid rounded />
@@ -72,12 +73,12 @@ function CartPage() {
 									<Col md={2}>
 										<Form.Control
 											as="select"
-											value={item.qty}
+											value={item.quantity}
 											onChange={(e) =>
 												dispatch(
 													cartSliceAction.updateItemQty({
 														productId: item.product,
-														qty: +e.target.value,
+														quantity: +e.target.value,
 													})
 												)
 											}
@@ -94,7 +95,7 @@ function CartPage() {
 										<Button
 											type="button"
 											variant="light"
-											onClick={() => removeFromCartHandler(item.product)}
+											onClick={() => removeItemFromCart(item._id)}
 										>
 											<i className="fas fa-trash"></i>
 										</Button>
@@ -110,12 +111,12 @@ function CartPage() {
 					<ListGroup>
 						<ListGroup.Item variant="flush">
 							<h2>
-								Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)})
-								item
+								Subtotal (
+								{cartItems.reduce((acc, item) => acc + item.quantity, 0)}) item
 							</h2>
 							$
 							{cartItems
-								.reduce((acc, item) => acc + item.qty * item.price, 0)
+								.reduce((acc, item) => acc + item.quantity * item.price, 0)
 								.toFixed(2)}
 						</ListGroup.Item>
 						<ListGroup.Item>

@@ -5,11 +5,12 @@ import {
 	deleteProduct,
 	createProduct,
 	updateProduct,
+	createReview,
 } from "./productAction";
 
 const initialState = {
 	products: [],
-	product: {},
+	product: { reviews: [] },
 	isLoading: false,
 	isError: false,
 	isSuccess: false,
@@ -17,6 +18,9 @@ const initialState = {
 	deleteSuccess: false,
 	createSuccess: false,
 	updateSuccess: false,
+	createReviewSuccess: false,
+	createReviewError: false,
+	reviewMessage: "",
 	createdProduct: {},
 };
 
@@ -31,7 +35,10 @@ export const productSlice = createSlice({
 			state.deleteSuccess = false;
 			state.createSuccess = false;
 			state.updateSuccess = false;
+			state.createReviewSuccess = false;
+			state.createReviewError = false;
 			state.message = "";
+			state.reviewMessage = "";
 		},
 	},
 	extraReducers: (builder) => {
@@ -110,6 +117,19 @@ export const productSlice = createSlice({
 				state.isSuccess = true;
 				state.updateSuccess = true;
 				state.product = action.payload;
+			})
+			.addCase(createReview.pending, (state) => {
+				state.createReviewSuccess = false;
+				state.createReviewError = false;
+			})
+			.addCase(createReview.rejected, (state, action) => {
+				state.createReviewSuccess = false;
+				state.createReviewError = true;
+				state.reviewMessage = action.payload;
+			})
+			.addCase(createReview.fulfilled, (state) => {
+				state.createReviewSuccess = true;
+				state.createReviewError = false;
 			});
 	},
 });

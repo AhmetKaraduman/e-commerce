@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { PayPalButton } from "react-paypal-button-v2";
 import { Link } from "react-router-dom";
-import { Row, Col, ListGroup, Image, Card } from "react-bootstrap";
+import { Row, Col, ListGroup, Image, Card, Button } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
-import { getOrderById } from "../features/order/orderAction";
+import { getOrderById, updateToDelivered } from "../features/order/orderAction";
 import { orderPay } from "../features/pay/payAction";
 import { paySliceAction } from "../features/pay/paySlice";
 
@@ -16,10 +16,10 @@ function OrderPage() {
 	const { id } = useParams();
 
 	const [sdkReady, setSdkReady] = useState(false);
-	const { orders, isError, isSuccess, isLoading, message } = useSelector(
-		(state) => state.orders
-	);
+	const { orders, isError, isSuccess, isLoading, message, isUpdateSuccess } =
+		useSelector((state) => state.orders);
 	const pay = useSelector((state) => state.pay);
+	const { user } = useSelector((state) => state.auth);
 
 	useEffect(() => {
 		const addPayPalScript = async () => {
@@ -48,8 +48,16 @@ function OrderPage() {
 		}
 	}, [id, pay.isSuccess, dispatch, orders]);
 
+	useEffect(() => {
+		dispatch(getOrderById(id));
+	}, [dispatch, id]);
+
 	const successPaymentHandler = (paymentResult) => {
 		dispatch(orderPay({ id, paymentResult }));
+	};
+
+	const deliverHandler = () => {
+		dispatch(updateToDelivered(id));
 	};
 
 	return isLoading ? (
@@ -173,6 +181,18 @@ function OrderPage() {
 											onSuccess={successPaymentHandler}
 										/>
 									)}
+								</ListGroup.Item>
+							)}
+
+							{user.isAdmin && !orders.isDelivered && (
+								<ListGroup.Item>
+									<Button
+										type="button"
+										className="btn btn-block"
+										onClick={deliverHandler}
+									>
+										Mark as Delivered
+									</Button>
 								</ListGroup.Item>
 							)}
 						</ListGroup>

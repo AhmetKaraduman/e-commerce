@@ -3,8 +3,8 @@ import axios from "axios";
 const PRODUCTS_API = "/api/products";
 
 // fetch all products
-const getProducts = async () => {
-	const response = await axios.get(PRODUCTS_API);
+const getProducts = async (keyword) => {
+	const response = await axios.get(PRODUCTS_API + `?keyword=${keyword}`);
 
 	return response.data;
 };
@@ -57,12 +57,24 @@ const updateProduct = async (info, token) => {
 	return data;
 };
 
+// create review
+const createReview = async (review, token) => {
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	};
+
+	await axios.post(PRODUCTS_API + `/${review.id}/reviews`, review, config);
+};
+
 const productServices = {
 	getProducts,
 	getProduct,
 	deleteProduct,
 	createProduct,
 	updateProduct,
+	createReview,
 };
 
 export default productServices;

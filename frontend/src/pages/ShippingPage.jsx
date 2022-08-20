@@ -15,7 +15,7 @@ function ShippingPage() {
 		useSelector((state) => state.shipping);
 	const [address, setAddress] = useState("");
 	const [city, setCity] = useState("");
-	const [postalCode, setPostalCode] = useState("");
+	const [postalCode, setPostalCode] = useState(0);
 	const [country, setCountry] = useState("");
 	const [comMessage, setComMessage] = useState(null);
 
