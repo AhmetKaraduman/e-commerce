@@ -5,19 +5,25 @@ import { Row, Col } from "react-bootstrap";
 import Product from "../components/Product";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
+import Paginate from "../components/Paginate";
 import { useParams } from "react-router-dom";
+import ProductCarousel from "../components/ProductCarousel";
 
 function HomePage() {
 	const params = useParams();
 	const keyword = params.keyword;
-	const { products, isLoading, isError, message } = useSelector(
-		(state) => state.product
-	);
+	const pageNumber = params.page;
+	const { products, isLoading, isError, message, page, totalPages } =
+		useSelector((state) => state.product);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		dispatch(fetchProducts(keyword));
-	}, [dispatch, keyword]);
+		const pageInfo = {
+			keyword: keyword || "",
+			pageNumber: pageNumber || 1,
+		};
+		dispatch(fetchProducts(pageInfo));
+	}, [dispatch, keyword, pageNumber]);
 
 	if (isLoading) {
 		return <Loader />;
@@ -28,6 +34,7 @@ function HomePage() {
 	}
 	return (
 		<>
+			{!keyword && <ProductCarousel />}
 			<h1>Latest Products</h1>
 			<Row>
 				{products.map((product) => (
@@ -36,6 +43,12 @@ function HomePage() {
 					</Col>
 				))}
 			</Row>
+
+			<Paginate
+				pages={totalPages}
+				page={page}
+				keyword={keyword ? keyword : ""}
+			/>
 		</>
 	);
 }

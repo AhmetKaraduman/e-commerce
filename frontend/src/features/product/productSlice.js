@@ -6,10 +6,14 @@ import {
 	createProduct,
 	updateProduct,
 	createReview,
+	getTopProducts,
 } from "./productAction";
 
 const initialState = {
+	topProducts: [],
 	products: [],
+	page: 0,
+	totalPages: 0,
 	product: { reviews: [] },
 	isLoading: false,
 	isError: false,
@@ -55,7 +59,9 @@ export const productSlice = createSlice({
 			.addCase(fetchProducts.fulfilled, (state, action) => {
 				state.isLoading = false;
 				state.isSuccess = true;
-				state.products = action.payload;
+				state.products = action.payload.products;
+				state.page = action.payload.page;
+				state.totalPages = action.payload.pages;
 				state.message = "";
 			})
 			.addCase(fetchProduct.pending, (state) => {
@@ -130,6 +136,16 @@ export const productSlice = createSlice({
 			.addCase(createReview.fulfilled, (state) => {
 				state.createReviewSuccess = true;
 				state.createReviewError = false;
+			})
+			.addCase(getTopProducts.pending, (state) => {
+				state.isError = false;
+				state.topProducts = [];
+			})
+			.addCase(getTopProducts.rejected, (state, action) => {
+				state.isError = true;
+			})
+			.addCase(getTopProducts.fulfilled, (state, action) => {
+				state.topProducts = action.payload;
 			});
 	},
 });

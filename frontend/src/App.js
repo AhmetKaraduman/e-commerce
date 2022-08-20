@@ -27,6 +27,8 @@ function App() {
 					<Routes>
 						<Route path="/" element={<HomePage />} />
 						<Route path="/search/:keyword" element={<HomePage />} />
+						<Route path="/search/:keyword/page/:page" element={<HomePage />} />
+						<Route path="/page/:page" element={<HomePage />} />
 						<Route path="/product/:id" element={<ProductPage />} />
 						<Route path="/cart">
 							<Route path="" element={<CartPage />} />
@@ -46,6 +48,10 @@ function App() {
 							element={<ProductEditPage />}
 						/>
 						<Route path="/admin/productList" element={<ProductListPage />} />
+						<Route
+							path="/admin/productList/:page"
+							element={<ProductListPage />}
+						/>
 						<Route path="/admin/orderlist" element={<OrderListPage />} />
 					</Routes>
 				</Container>

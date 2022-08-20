@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
 import { Table, Button, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,10 +11,14 @@ import {
 	createProduct,
 } from "../features/product/productAction";
 import { productSliceAction } from "../features/product/productSlice";
+import Paginate from "../components/Paginate";
 
 function ProductListPage() {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const params = useParams();
+	const keyword = params.keyword;
+	const pageNumber = params.page;
 
 	const productList = useSelector((state) => state.product);
 	const {
@@ -25,6 +29,8 @@ function ProductListPage() {
 		message,
 		createSuccess,
 		createdProduct,
+		page,
+		totalPages,
 	} = productList;
 	const authUser = useSelector((state) => state.auth);
 
@@ -37,9 +43,13 @@ function ProductListPage() {
 		if (createSuccess) {
 			navigate(`/admin/products/${createdProduct._id}/edit`);
 		} else {
-			dispatch(fetchProducts());
+			const pageInfo = {
+				keyword: keyword || "",
+				pageNumber: pageNumber || 1,
+			};
+			dispatch(fetchProducts(pageInfo));
 		}
-	}, [dispatch, navigate, authUser, deleteSuccess, createSuccess]);
+	}, [dispatch, navigate, authUser, deleteSuccess, createSuccess, pageNumber]);
 
 	const deleteHandler = (id) => {
 		dispatch(deleteProduct(id));
@@ -105,6 +115,13 @@ function ProductListPage() {
 					</tbody>
 				</Table>
 			)}
+
+			<Paginate
+				pages={totalPages}
+				page={page}
+				keyword={keyword ? keyword : ""}
+				isAdmin={true}
+			/>
 		</>
 	);
 }

@@ -5,9 +5,9 @@ import productServices from "./productServices";
 export const fetchProducts = createAsyncThunk(
 	"product/fetchProducts",
 
-	async (keyword = "", thunkAPI) => {
+	async (pageInfo, thunkAPI) => {
 		try {
-			return await productServices.getProducts(keyword);
+			return await productServices.getProducts(pageInfo);
 		} catch (error) {
 			const message =
 				(error.response &&
@@ -112,6 +112,26 @@ export const createReview = createAsyncThunk(
 		try {
 			const token = thunkAPI.getState().auth.user.token;
 			return await productServices.createReview(review, token);
+		} catch (error) {
+			const message =
+				(error.response &&
+					error.response.data &&
+					error.response.data.message) ||
+				error.message ||
+				error.toString();
+
+			return thunkAPI.rejectWithValue(message);
+		}
+	}
+);
+
+// get top products
+export const getTopProducts = createAsyncThunk(
+	"product/getTopProducts",
+
+	async (_, thunkAPI) => {
+		try {
+			return await productServices.getTopProducts();
 		} catch (error) {
 			const message =
 				(error.response &&

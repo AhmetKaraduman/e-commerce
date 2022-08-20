@@ -3,8 +3,11 @@ import axios from "axios";
 const PRODUCTS_API = "/api/products";
 
 // fetch all products
-const getProducts = async (keyword) => {
-	const response = await axios.get(PRODUCTS_API + `?keyword=${keyword}`);
+const getProducts = async (pageInfo) => {
+	const response = await axios.get(
+		PRODUCTS_API +
+			`?keyword=${pageInfo.keyword}&pageNumber=${pageInfo.pageNumber}`
+	);
 
 	return response.data;
 };
@@ -68,6 +71,12 @@ const createReview = async (review, token) => {
 	await axios.post(PRODUCTS_API + `/${review.id}/reviews`, review, config);
 };
 
+// get top products
+const getTopProducts = async () => {
+	const { data } = await axios.get(`${PRODUCTS_API}/top`);
+	return data;
+};
+
 const productServices = {
 	getProducts,
 	getProduct,
@@ -75,6 +84,7 @@ const productServices = {
 	createProduct,
 	updateProduct,
 	createReview,
+	getTopProducts,
 };
 
 export default productServices;
