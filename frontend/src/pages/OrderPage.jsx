@@ -16,8 +16,13 @@ function OrderPage() {
 	const { id } = useParams();
 
 	const [sdkReady, setSdkReady] = useState(false);
-	const { orders, isError, isSuccess, isLoading, message, isUpdateSuccess } =
-		useSelector((state) => state.orders);
+	const {
+		orders,
+		singleOrderError,
+		singleOrderSuccess,
+		singleOrderLoading,
+		message,
+	} = useSelector((state) => state.orders);
 	const pay = useSelector((state) => state.pay);
 	const { user } = useSelector((state) => state.auth);
 
@@ -60,11 +65,11 @@ function OrderPage() {
 		dispatch(updateToDelivered(id));
 	};
 
-	return isLoading ? (
+	return singleOrderLoading ? (
 		<Loader />
-	) : isError ? (
+	) : singleOrderError ? (
 		<Message variant="danger">{message}</Message>
-	) : isSuccess ? (
+	) : singleOrderSuccess ? (
 		<>
 			<h1>Order {orders._id}</h1>
 			<Row>

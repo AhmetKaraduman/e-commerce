@@ -8,6 +8,7 @@ import Loader from "../components/Loader";
 import Paginate from "../components/Paginate";
 import { useParams } from "react-router-dom";
 import ProductCarousel from "../components/ProductCarousel";
+import Meta from "../components/Meta";
 
 function HomePage() {
 	const params = useParams();
@@ -34,6 +35,7 @@ function HomePage() {
 	}
 	return (
 		<>
+			<Meta />
 			{!keyword && <ProductCarousel />}
 			<h1>Latest Products</h1>
 			<Row>

@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { useParams } from "react-router-dom";
-import { authSliceAction } from "../features/auth/authSlice";
 import FormContainer from "../components/FormContainer";
 import { getUserDetail, updateUser } from "../features/user/userAction";
 
@@ -33,7 +32,7 @@ function UserEditPage() {
 		setName(user.name);
 		setEmail(user.email);
 		setIsAdmin(user.isAdmin);
-	}, [dispatch, user.name, user.email, user.isAdmin]);
+	}, [dispatch, user.name, user.email, user.isAdmin, userId, authedUser.token]);
 
 	const submitHandler = async (e) => {
 		e.preventDefault();

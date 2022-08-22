@@ -49,7 +49,16 @@ function ProductListPage() {
 			};
 			dispatch(fetchProducts(pageInfo));
 		}
-	}, [dispatch, navigate, authUser, deleteSuccess, createSuccess, pageNumber]);
+	}, [
+		dispatch,
+		navigate,
+		authUser,
+		deleteSuccess,
+		createSuccess,
+		pageNumber,
+		createdProduct._id,
+		keyword,
+	]);
 
 	const deleteHandler = (id) => {
 		dispatch(deleteProduct(id));

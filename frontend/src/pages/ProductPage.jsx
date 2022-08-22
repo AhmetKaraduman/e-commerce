@@ -17,6 +17,7 @@ import Loader from "../components/Loader";
 import Message from "../components/Message";
 import { createCartItem } from "../features/cart/cartAction";
 import { productSliceAction } from "../features/product/productSlice";
+import Meta from "../components/Meta";
 
 function ProductPage() {
 	const params = useParams();
@@ -87,6 +88,11 @@ function ProductPage() {
 
 	return (
 		<>
+			<Meta
+				title={product.name}
+				description={product.description}
+				keywords={product.name}
+			/>
 			<Link className="btn btn-light my-3" to="/">
 				Go Back
 			</Link>

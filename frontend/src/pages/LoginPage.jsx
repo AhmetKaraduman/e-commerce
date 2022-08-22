@@ -28,7 +28,7 @@ function LoginPage() {
 		if (user) {
 			navigate("/");
 		}
-	}, [user]);
+	}, [user, navigate]);
 
 	if (isSuccess || isError) {
 		setTimeout(() => dispatch(authSliceAction.reset()), 3000);

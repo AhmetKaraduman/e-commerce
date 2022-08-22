@@ -24,7 +24,6 @@ function ProductEditPage() {
 	const { isLoading, isError, product, updateSuccess } = useSelector(
 		(state) => state.product
 	);
-	const { user: authedUser } = useSelector((state) => state.auth);
 
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -45,7 +44,20 @@ function ProductEditPage() {
 			setCountInStock(product.countInStock);
 			setDescription(product.description);
 		}
-	}, [dispatch, productId, product._id, updateSuccess]);
+	}, [
+		dispatch,
+		productId,
+		product._id,
+		updateSuccess,
+		navigate,
+		product.brand,
+		product.category,
+		product.countInStock,
+		product.description,
+		product.image,
+		product.name,
+		product.price,
+	]);
 
 	const submitHandler = async (e) => {
 		e.preventDefault();

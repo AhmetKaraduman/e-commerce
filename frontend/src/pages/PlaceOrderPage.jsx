@@ -7,7 +7,6 @@ import Message from "../components/Message";
 import CheckoutStep from "../components/CheckoutStep";
 import Loader from "../components/Loader";
 import { createOrder } from "../features/order/orderAction";
-import { orderSliceAction } from "../features/order/orderSlice";
 
 function PlaceOrder() {
 	const dispatch = useDispatch();

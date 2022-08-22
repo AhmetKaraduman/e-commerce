@@ -13,7 +13,6 @@ import {
 	Card,
 } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import { useParams, useLocation } from "react-router-dom";
 import Loader from "../components/Loader";
 
 function CartPage() {
@@ -21,18 +20,11 @@ function CartPage() {
 		useSelector((state) => state.cart);
 	const { user } = useSelector((state) => state.auth);
 	const dispatch = useDispatch();
-	const params = useParams();
 	const navigate = useNavigate();
-	const location = useLocation();
-	const qty = location.search ? +location.search.split("=")[1] : 1;
-	const itemInfo = {
-		productId: params.id,
-		qty,
-	};
 
 	useEffect(() => {
 		dispatch(getCartItem());
-	}, [isDeleteSuccess, isCreateSuccess]);
+	}, [isDeleteSuccess, isCreateSuccess, dispatch]);
 
 	const removeItemFromCart = (id) => {
 		dispatch(deleteCartItem(id));

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
 import { Form, Button, Row, Col, Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -54,7 +54,7 @@ function ProfilePage() {
 		} else {
 			setComMessage("Password do not match");
 			setTimeout(
-				() => (dispatch(authSliceAction.reset()), setComMessage(null)),
+				() => dispatch(authSliceAction.reset(), setComMessage(null)),
 				3000
 			);
 		}
@@ -68,7 +68,7 @@ function ProfilePage() {
 			setName(user.name);
 			setEmail(user.email);
 		}
-	}, [user]);
+	}, [user, dispatch, navigate]);
 
 	useEffect(() => {
 		if (myOrders.isSuccess) {
@@ -78,7 +78,7 @@ function ProfilePage() {
 		if (isSuccess || isError) {
 			setTimeout(() => dispatch(authSliceAction.reset()), 3000);
 		}
-	}, [myOrders.isSuccess, isSuccess, isError]);
+	}, [myOrders.isSuccess, isSuccess, isError, dispatch]);
 
 	if (isLoading) {
 		return <Loader />;

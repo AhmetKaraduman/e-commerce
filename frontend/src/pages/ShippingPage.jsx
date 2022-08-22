@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import FormContainer from "../components/FormContainer";
@@ -35,7 +35,7 @@ function ShippingPage() {
 			dispatch(getAddress(userInfo));
 			setTimeout(() => dispatch(shippingSliceAction.reset()), 3000);
 		}
-	}, [shippingAddress]);
+	}, [shippingAddress, dispatch, user.token]);
 
 	const submitHandler = (e) => {
 		e.preventDefault();

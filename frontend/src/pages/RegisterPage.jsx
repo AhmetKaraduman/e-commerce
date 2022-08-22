@@ -27,7 +27,7 @@ function RegisterPage() {
 		if (!email || !password || !name) {
 			setComMessage("Please fill all fields ");
 			setTimeout(
-				() => (dispatch(authSliceAction.reset()), setComMessage(null)),
+				() => dispatch(authSliceAction.reset(), setComMessage(null)),
 				3000
 			);
 		} else {
@@ -36,7 +36,8 @@ function RegisterPage() {
 			} else {
 				setComMessage("Password do not match");
 				setTimeout(
-					() => (dispatch(authSliceAction.reset()), setComMessage(null)),
+					() => dispatch(authSliceAction.reset()),
+					setComMessage(null),
 					3000
 				);
 			}
@@ -47,7 +48,7 @@ function RegisterPage() {
 		if (user) {
 			navigate("/");
 		}
-	}, [user]);
+	}, [user, navigate]);
 
 	if (isSuccess || isError) {
 		setTimeout(() => dispatch(authSliceAction.reset()), 3000);
