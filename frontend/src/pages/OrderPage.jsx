@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { PayPalButton } from "react-paypal-button-v2";
+import React, { useEffect } from "react";
+// import axios from "axios";
+// import { PayPalButton } from "react-paypal-button-v2";
 import { Link } from "react-router-dom";
 import { Row, Col, ListGroup, Image, Card, Button } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
@@ -8,14 +8,14 @@ import { useParams } from "react-router-dom";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { getOrderById, updateToDelivered } from "../features/order/orderAction";
-import { orderPay } from "../features/pay/payAction";
-import { paySliceAction } from "../features/pay/paySlice";
+// import { orderPay } from "../features/pay/payAction";
+// import { paySliceAction } from "../features/pay/paySlice";
 
 function OrderPage() {
 	const dispatch = useDispatch();
 	const { id } = useParams();
 
-	const [sdkReady, setSdkReady] = useState(false);
+	// const [sdkReady, setSdkReady] = useState(false);
 	const {
 		orders,
 		singleOrderError,
@@ -23,43 +23,43 @@ function OrderPage() {
 		singleOrderLoading,
 		message,
 	} = useSelector((state) => state.orders);
-	const pay = useSelector((state) => state.pay);
+	// const pay = useSelector((state) => state.pay);
 	const { user } = useSelector((state) => state.auth);
 
-	useEffect(() => {
-		const addPayPalScript = async () => {
-			const { data: clientId } = await axios.get("/api/config/paypal");
-			const script = document.createElement("script");
-			script.type = "text/javascript";
-			script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`;
-			script.async = true;
-			script.onload = () => {
-				setSdkReady(true);
-			};
-			document.body.appendChild(script);
-		};
+	// useEffect(() => {
+	// 	const addPayPalScript = async () => {
+	// 		const { data: clientId } = await axios.get("/api/config/paypal");
+	// 		const script = document.createElement("script");
+	// 		script.type = "text/javascript";
+	// 		script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`;
+	// 		script.async = true;
+	// 		script.onload = () => {
+	// 			setSdkReady(true);
+	// 		};
+	// 		document.body.appendChild(script);
+	// 	};
 
-		addPayPalScript();
+	// 	addPayPalScript();
 
-		if (!orders || pay.isSuccess) {
-			dispatch(paySliceAction.reset());
-			dispatch(getOrderById(id));
-		} else if (!orders.isPaid) {
-			if (!window.paypal) {
-				addPayPalScript();
-			} else {
-				setSdkReady(true);
-			}
-		}
-	}, [id, pay.isSuccess, dispatch, orders]);
+	// 	if (!orders || pay.isSuccess) {
+	// 		dispatch(paySliceAction.reset());
+	// 		dispatch(getOrderById(id));
+	// 	} else if (!orders.isPaid) {
+	// 		if (!window.paypal) {
+	// 			addPayPalScript();
+	// 		} else {
+	// 			setSdkReady(true);
+	// 		}
+	// 	}
+	// }, [id, pay.isSuccess, dispatch, orders]);
 
 	useEffect(() => {
 		dispatch(getOrderById(id));
 	}, [dispatch, id]);
 
-	const successPaymentHandler = (paymentResult) => {
-		dispatch(orderPay({ id, paymentResult }));
-	};
+	// const successPaymentHandler = (paymentResult) => {
+	// 	dispatch(orderPay({ id, paymentResult }));
+	// };
 
 	const deliverHandler = () => {
 		dispatch(updateToDelivered(id));
@@ -175,7 +175,7 @@ function OrderPage() {
 									<Col>${orders.totalPrice}</Col>
 								</Row>
 							</ListGroup.Item>
-							{!orders.isPaid && (
+							{/* {!orders.isPaid && (
 								<ListGroup.Item>
 									{pay.isLoading && <Loader />}
 									{!sdkReady ? (
@@ -187,7 +187,7 @@ function OrderPage() {
 										/>
 									)}
 								</ListGroup.Item>
-							)}
+							)} */}
 
 							{user.isAdmin && !orders.isDelivered && (
 								<ListGroup.Item>
